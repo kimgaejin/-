@@ -1,0 +1,114 @@
+// 1018 체스판 다시 칠하기
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int func(vector<string> &v, int param)
+{
+    char w = 'W';
+    char b = 'B';
+    // 파라미터에 따라 W부터 시작할지 B부터 시작할지 정한다
+    if (param == 1)
+    {
+        w = 'B';
+        b = 'W';
+    }
+    
+    // (0,0) 위치에서 8*8 체스판은 몇개를 고쳐야하는지 알아둔다
+    int result = 0;
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            if ((i+j)%2 ==0 && v[i][j] != w) result++;
+            else if ((i+j)%2 == 1 && v[i][j] != b) result++;
+        }
+    }
+    
+    int width = v[0].size();
+    int height = v.size();
+    int cur = result;
+
+    // 8*8 체스판이 한칸씩 움직이면서 인접한 8칸(가로 혹은 세로 1줄)의 정답 수를 교환한다.
+    // 오른쪽으로 진행 시, 왼쪽 8칸의 값을 빼고 오른쪽 8칸의 값을 추가한다.
+    for (int i = 0; i <= height-8; i++)
+    {
+        int saveValue = cur;
+        // 체스판을 오른쪽으로 이동시키며 확인한다
+        for (int j = 0; j <= width-8; j++)
+        {
+            // 체스판보다 앞에 있는 것과 비교해야하기에 8+j가 범위를 벗어난다면 탈출
+            if (width <= 8+j)
+                break;
+            
+            int left = 0;
+            for (int t = 0; t < 8; t++)
+            {
+                if ((i+j+t)%2 ==0 && v[i+t][j] != w) left++;
+                else if ((i+j+t)%2 == 1 && v[i+t][j] != b) left++;
+            }
+            
+            int right = 0;
+            for (int t = 0; t < 8; t++)
+            {
+                if ((i+j+t)%2 ==0 && v[i+t][8+j] != w) right++;
+                else if ((i+j+t)%2 == 1 && v[i+t][8+j] != b) right++;
+            }
+            
+            cur = cur + right - left;
+            //cout << cur << " ";
+            if (cur < result) // 최소값 확인
+                result = cur;
+        }
+        
+        // 높이와 일치하면 아래로 내리는 것은 하지않는다.
+        if (i == height-8)
+             break;
+        
+        // 가로로 모두 진행했다면 초기값으로 바꾼 후 체스판을 아래로 내린다
+        int up = 0;
+        for (int t = 0; t < 8; t++)
+        {
+            if ((i+t)%2 ==0 && v[i][t] != w) up++;
+            else if ((i+t)%2 == 1 && v[i][t] != b) up++;
+        }
+        
+        int down = 0;
+        for (int t = 0; t < 8; t++)
+        {
+            if ((i+t)%2 ==0 && v[8+i][t] != w) down++;
+            else if ((i+t)%2 == 1 && v[8+i][t] != b) down++;
+        }
+        
+        cur = saveValue - up + down;
+        //cout << "/"<< cur << " ";
+        if (cur < result) // 최소값 확인
+            result = cur;
+
+    }
+    
+    return result;
+}
+
+int main()
+{
+    int h, w;
+    cin >> h >> w;
+    
+    vector<string> v(h);
+    for (int i = 0; i < h; i++)
+        cin >> v[i];
+    
+    int r1 = func(v, 0);
+    //cout << endl;
+    int r2 = func(v, 1);
+    //cout << endl;
+    //cout << r1 << "," << r2 << endl ;
+    if (r1 < r2)
+        cout << r1;
+    else
+        cout << r2;
+
+    return 0;
+}
