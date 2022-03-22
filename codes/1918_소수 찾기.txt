@@ -1,0 +1,63 @@
+// 1978 소수 찾기
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+    
+    int n;
+    cin >> n;
+    
+    // n개의 수를 vector<int> num에 삽입하고, 가장 큰 값은 highest에 저장한다.
+    vector<int> num(n);
+    int highest = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int _num;
+        cin >> _num;
+        num[i] = _num;
+        if (highest < _num)
+            highest = _num;
+    }
+    
+    // 가장 큰 값 +1 만큼의 배열을 만든다.
+    // 0은 소수, 1은 소수가 아닌 수
+    vector<int> v(highest+1, 0);
+    v[0] = 1; // 0과 1은 소수가 아니다
+    v[1] = 1;
+    
+    // 2부터 가장 큰 수 까지 2의 배수는 소수라고 (2 본인은 무시) 4, 6... 칸에 1로 표시한다.
+    for (int i = 2; i <= highest; i++)
+    {
+        // 이미 v[i]가 소수가 아니라면, 그 배수도 소수가 아니므로 넘긴다.
+        if (v[i] == 1)
+            continue;
+        
+        for (int j = 2; i * j <= highest; j++)
+        {
+            if (v[i*j] == 0)
+            {
+                v[i*j] = 1;
+            }
+        }
+    }
+    
+    /*
+    // 디버깅용 모든 소수를 보는 코드
+    for (int i = 1 ; i <= highest; i++)
+        cout << v[i] << " ";
+    cout << endl;
+    */
+    
+    // 결과 출력, v[k] 는 k가 소수인지 아닌지 0과 1로 알려준다.
+    int result = 0;
+    for (int i = 0; i < n; i++)
+        if (v[num[i]] == 0)
+            result++;
+    
+    cout << result << endl;
+
+    return 0;
+}
