@@ -1,0 +1,71 @@
+// 10828 스택
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+/*
+push X: 정수 X를 스택에 넣는 연산이다.
+pop: 스택에서 가장 위에 있는 정수를 빼고, 그 수를 출력한다. 만약 스택에 들어있는 정수가 없는 경우에는 -1을 출력한다.
+size: 스택에 들어있는 정수의 개수를 출력한다.
+empty: 스택이 비어있으면 1, 아니면 0을 출력한다.
+top: 스택의 가장 위에 있는 정수를 출력한다. 만약 스택에 들어있는 정수가 없는 경우에는 -1을 출력한다.
+*/
+int main()
+{
+    int n;
+    cin >> n;
+    
+    // 명령의 수는 10000보다 작거나 같다, 스택의 최대 크기는 안나와있으니 10001로 가정한다
+    int myStack[10001];
+    int index = 0;
+    
+    for (int i = 0; i < n; i++)
+    {
+        char command[10];
+        cin >> command;
+        
+        if (strcmp(command, "push") == 0)
+        {
+            // push 인 경우에만 추가 인자를 받아 스택에 넣는다
+            int param;
+            cin >> param;
+            
+            myStack[index] = param;
+            index++;
+        }
+        else if (strcmp(command, "pop") == 0)
+        {
+            if (index == 0)
+            {
+                cout << -1 << endl;
+            }
+            else
+            {
+                index--;
+                cout << myStack[index] << endl;
+            }
+        }
+        else if (strcmp(command, "size") == 0)
+        {
+            cout << index << endl;
+        }
+        else if (strcmp(command, "empty") == 0)
+        {
+            if (index == 0)
+                cout << 1 << endl;
+            else
+                cout << 0 << endl;
+        }
+        else if (strcmp(command, "top") == 0)
+        {
+            if (index == 0)
+                cout << -1 << endl;
+            else
+                cout << myStack[index-1] << endl;
+        }
+
+    }
+    
+    return 0;
+}
