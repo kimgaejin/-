@@ -1,0 +1,51 @@
+// 9012 괄호
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+    
+    while (n > 0)
+    {
+        string s;
+        cin >> s;
+        
+        // 괄호가 생성될 때 마다 v가 1씩 증가
+        // 괄호가 사라질 때 마다 v가 1씩 감소
+        int v = 0;
+        bool result = true;
+        for (int i = 0; i < s.size(); i++)
+        {
+            if (s[i] == '(')
+            {
+                v++;
+            }
+            else if (s[i] == ')')
+            {
+                // 만약 v가 0보다 작아진다면 닫는 괄호가 여는 괄호보다 많다는 것
+                if (v == 0)
+                {
+                    result = false;
+                    break;
+                }
+                v--;
+            }
+        }
+        // 만약 결과에서 v가 0보다 크다면 여는 괄호가 닫는 괄호보다 많다는 것 
+        if (0 < v)
+            result = false;
+        
+        if (result == true)
+            cout << "YES" << endl;
+        else
+            cout << "NO" << endl;
+        
+        
+        n--;
+    }
+
+    return 0;
+}
