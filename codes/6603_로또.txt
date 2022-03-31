@@ -1,0 +1,57 @@
+// 6603 로또
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// v: 번호 후보들이 모두 들어있는 벡터
+// result: 결과 값으로 출력할, 6개의 로또 번호를 기록하는 문자열
+// r: 로또 번호를 넣어두는 벡터
+// i: v[i] 번째 번호를 넣을지 말지 결정한다
+void func(vector<int> &v, string &result, vector<int> &r, int i)
+{
+    // 6개 번호를 모두 뽑았다면 결과에 삽입한다
+    if (r.size() == 6)
+    {
+        for (int t = 0 ; t < 6; t++)
+            result += to_string(r[t]) + " ";
+        result += "\n";
+        return;
+    }
+    
+    if (v.size() <= i)
+        return;
+    
+    // i번째 번호를 넣은 경우를 계산한다
+    r.push_back(v[i]);
+    func(v, result, r, i+1);
+    
+    // i번째 번호를 넣지 않은 경우를 계산한다
+    r.pop_back();
+    func(v, result, r, i+1);
+}
+
+
+int main()
+{
+    while (true)
+    {
+        // 0을 입력받을 때 까지 반복
+        int n;
+        cin >> n;
+        if (n == 0)
+            break;
+        
+        vector<int> v(n);
+        for (int i = 0 ; i < n; i++)
+            cin >> v[i];
+        
+        string result = "";
+        vector<int> r;
+        func(v, result, r, 0);
+        
+        cout << result << endl;
+    }
+
+    return 0;
+}
