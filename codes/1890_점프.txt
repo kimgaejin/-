@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+long long func(vector<vector<long long>> &v, vector<vector<long long>> &r, int n, int x, int y)
+{
+    if (x == 0 && y == 0)
+        return 1;
+        
+    if (r[y][x] != -1)
+        return r[y][x];
+    
+    long long ret = 0;
+    for (int _x = x-1; 0 <= _x; _x--)
+    {
+        if (v[y][_x] == x - _x)
+            ret += func(v, r, n, _x, y);
+    }
+    for (int _y = y-1; 0 <= _y; _y--)
+    {
+        if (v[_y][x] == y - _y)
+            ret += func(v, r, n, x, _y);
+    }
+    
+    r[y][x] = ret;
+    return ret;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    
+    vector<vector<long long>> v;
+    
+    
+    for (int i = 0 ; i < n; i++)
+    {
+        vector<long long> t(n);
+        
+        for (int j = 0 ; j < n; j++)
+            cin >> t[j];
+        v.push_back(t);
+    }
+    
+    vector<vector<long long>> r;
+    for (int i = 0 ; i < n; i++)
+    {
+        vector<long long> u(n, -1);
+        r.push_back(u);
+    }
+    
+    cout << func(v, r, n, n-1, n-1) << endl;
+    
+
+    return 0;
+}
