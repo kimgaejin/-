@@ -1,0 +1,47 @@
+//4948 베르트랑 공준
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// n보다 크고 2n보다 작거나 같은 소수의 개수를 출력해야한다.
+int main()
+{
+    int max = 250000;
+    vector<int> isPrime(max, 0); // 소수라면 0, 아니라면 1
+    vector<int> prime(max, 0);
+    
+    isPrime[1] = 1;
+    int primeSize = 0;
+    for (int i = 2; i <= max; i++)
+    {
+        // 이미 중복되어 소수가 아니라면
+        if (isPrime[i] == 1)
+        {
+            prime[i] = primeSize;
+            continue;
+        }
+        
+        // 들어온 적 없는, 소수라면
+        primeSize++;
+        prime[i] = primeSize;
+        
+        // 그 배수들은 모두 소수가 아니라고 적어놓는다
+        for (int j = 2; i*j <= max; j++)
+        {
+            isPrime[i*j] = 1;
+        }
+    }
+    
+    while (true)
+    {
+        int n;
+        cin >> n;
+        if (n  == 0)
+            break;
+        
+        cout << prime[2*n] - prime[n] << endl;
+    }
+        
+    return 0;
+}
