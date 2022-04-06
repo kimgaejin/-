@@ -1,0 +1,42 @@
+// 1912 연속합
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+    
+    // 최대 100,000,000
+    vector<long long> v(n, 0);
+    for (int i = 0 ; i < n; i++)
+    {
+        int t;
+        cin >> t;
+        
+        // 입력 받은 수는 v[i] 에 들어가며 v[i-1]과 합쳐졌을 때 더 커질지 살핀다.
+        // 더 커진다면 v[i]는 점점 커가지만, 음수가 들어오면 점점 작아지고
+        // v[i]가 음수가 된다면 그 다음의 v[i+1]에서는 v[i] 값과 합치지 않을 것이다.
+        v[i] = t;
+        if (i != 0)
+        {
+            if (v[i-1] < 0)
+                v[i] = t;
+            else
+                v[i] = v[i-1] + t;
+        }
+    }
+    
+    long long m = v[0];
+    for (int i =0 ; i < n; i++)
+    {
+        if (m < v[i])
+            m = v[i];
+    }
+    
+    cout << m << endl;
+
+    return 0;
+}
