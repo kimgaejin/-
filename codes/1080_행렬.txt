@@ -1,0 +1,75 @@
+// 1080 행렬
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// 디버깅용 행렬 출력 코드
+void printP(vector<string> &P)
+{
+    string r = "";
+    for (int i = 0 ; i < P.size(); i++)
+    {
+        r += P[i] + "\n";
+    }
+    cout << r << endl;
+}
+
+int main()
+{
+    int n, m;
+    cin >> n >> m;
+    
+    vector<string> A(n);
+    vector<string> B(n);
+    
+    // 행렬 입력
+    for (int i = 0 ; i < n; i++)
+        cin >> A[i];
+    for (int i = 0 ; i < n; i++)
+        cin >> B[i];
+
+    int swapCount = 0;
+    for (int i = 0 ; i < n; i++)
+    {
+        // 변환이 불가능한 행렬인 경우 멈추기
+        if (swapCount == -1)
+            break;
+        
+        for (int j = 0 ; j < m; j++)
+        {
+            if (i <= n-3 && j <= m-3)
+            {
+                // 행렬의 (i,j)가 같지 않다면, 그 오른쪽, 아래로 3*3칸을 모두 바꾼다
+                if (A[i][j] != B[i][j])
+                {
+                    swapCount++;
+                    for (int u = 0; u < 3; u++)
+                    {
+                        for (int v = 0; v < 3; v++)
+                        {
+                            if (A[i+u][j+v] == '0')
+                                A[i+u][j+v] = '1';
+                            else
+                                A[i+u][j+v] = '0';
+                        }
+                    }
+                }
+            }
+            
+            //printP(A);
+            
+            // 가장 밑 칸에서 2번째까지나 가장 오른쪽에서 2번째까지가
+            // A와 B행렬이 동일하지 않다면, 이는 변환이 불가능한 행렬이다.
+            if (A[i][j] != B[i][j])
+            {
+                swapCount = -1;
+                break;
+            }
+        }
+    }
+    
+    cout << swapCount << endl;
+
+    return 0;
+}
