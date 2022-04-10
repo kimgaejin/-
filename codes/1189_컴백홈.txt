@@ -1,0 +1,71 @@
+// 1189 컴백홈
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+// s: 거리가 장애물인지 무엇인지 2차원 맵
+// v: 현재 좌표를 방문했는지 방문하지 않았는지 2차원 맵
+// x,y: 현재 좌표
+// gx, gy: 목표로 하는 좌표. 도달시 1 반환
+// d: 내가 이동할 수 있는 거리가 얼마나 남았는지
+int dfs(vector<string> &s, vector<string> &v, int x, int y, int gx, int gy, int d)
+{
+    if (x < 0 || gx < x)
+        return 0;
+    if (y < 0 || gy < y)
+        return 0;
+    
+    // 장애물이거나 방문한곳이면 제외
+    if (s[y][x] == 'T')
+        return 0;
+    if (v[y][x] == '1')
+        return 0;
+    
+    if (gx == x && gy == y && d == 1)
+        return 1;
+    if (d < 0)
+        return 0;
+    
+    int ret = 0;
+    v[y][x] = '1';
+    
+    //string t = "";
+    //for (int i = 0 ; i <= gy; i++)
+    //    t += v[i] + "\n";
+    //cout << t << endl;
+    
+    ret += dfs(s, v, x+1, y, gx, gy, d-1);
+    ret += dfs(s, v, x, y+1, gx, gy, d-1);
+    ret += dfs(s, v, x-1, y, gx, gy, d-1);
+    ret += dfs(s, v, x, y-1, gx, gy, d-1);
+    
+    v[y][x] = '0';
+    return ret;
+}
+
+int main()
+{   
+    int n, c, k;
+    cin >> n >> c >> k;
+    
+    vector<string> s(n);
+    // 시작 지점을 0,0 으로 만들기 위해 뒤집어서 넣어준다.
+    vector<string> v(n, "");
+    for (int i = 0 ; i < n; i++)
+    {
+        cin >> s[n-i-1];
+        for (int j = 0; j < c; j++)
+        {
+            v[i] += '0';
+        }
+    }
+    
+    // 좌표공간이 최대 5*5이며, 가장 빠른 길을 찾는 것이 아니기 때문에 dfs로 출발
+    int r = 0;
+    r = dfs(s, v, 0, 0, c-1, n-1, k);
+    cout << r << endl;
+    
+    return 0;
+}
