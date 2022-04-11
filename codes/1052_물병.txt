@@ -1,0 +1,58 @@
+// 1052 물병
+#include <iostream>
+
+using namespace std;
+
+// 물이 65L가 있다면, 물병을 1개 추가로 사서 64/2L로 나눠야 한다.
+// 물병의 개수 k가 물의 양 l과 함께 주어질 때, 옮길 수 있는지 확인하는 함수를 만들면?
+
+bool func(int k, int l)
+{
+    int s = 1; // l보다 작으면서 2의 제곱 중 가장 큰 수
+    while (s*2 <= l)
+    {
+        s *= 2;
+    }
+    
+    while (0 < k && 0 < l)
+    {
+        // 병 하나를 줄여서, s(l보다 작거나 같은 2의 제곱)만큼의 물을 덜어낸다.
+        k--;
+        while (l < s && l != 0)
+        {
+            s /= 2;
+        }
+        l -= s;
+        //cout << s << " ";
+    }
+    
+    // 물병의 개수를 초과했거나, 물을 다 못덜어냈다면 false 반환
+    if (k < 0 || 0 < l)
+        return false;
+    return true;
+}
+
+int main()
+{
+    int l, k;
+    cin >> l >> k;
+    
+    int v = 0;
+    while (true)
+    {
+        bool ret = func(k, l+v);
+        if (ret)
+            break;
+        v++;
+    }
+    
+    // 정답이 없는 경우는 없다. 상점에서 물병을 사지 않아도 된다면, 0을 출력한다.
+    //if (v == 0)
+    //    cout << -1 << endl;
+    //else
+    
+    // 
+    cout << v << endl;
+
+    return 0;
+}
