@@ -1,0 +1,64 @@
+// 1325 효율적인 해킹
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// 컴퓨터들로부터 얼마나 신뢰받는지 dfs로 탐색한다.
+int dfs(vector<vector<int>> &cr, vector<int> &visited, int cur)
+{
+    if (visited[cur] == 1)
+        return 0;
+    visited[cur] = 1;
+
+    int r = 1;
+    for (int i = 0 ; i < cr[cur].size(); i++)
+    {
+        r += dfs(cr, visited, cr[cur][i]);   
+    }
+    
+    return r;
+}
+
+int main()
+{
+    int n, m;
+    cin >> n >> m;
+    
+    vector<vector<int>> cr(n+1); // computer relation. i번째 컴퓨터가 { 2,3,4 }라면 2,3,4로부터 신뢰받는다. 
+    for (int i = 0 ; i < m; i++)
+    {
+        int a, b; // a가 b를 신뢰한다.
+        cin >> a >> b;
+        
+        cr[b].push_back(a);
+    }
+
+    vector<int> visited(n+1, 0);
+    string answer = "";
+    int biggest = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 0; j <= n; j++)
+            visited[j] = 0;
+        
+        int ret = dfs(cr, visited, i);
+        
+        // 가장 값이 큰 경우, 가장 신뢰받는 컴퓨터가 된다.
+        // 정답 출력은 문자열로 저장한다.
+        if (biggest < ret)
+        {
+            biggest = ret;
+            answer = "";
+        }
+        if (biggest <= ret)
+        {
+            answer += to_string(i) + " ";
+        }
+        //cout << ret << ":"<< answer << endl;
+    }
+    
+    cout << answer << endl;
+
+    return 0;
+}
