@@ -1,0 +1,38 @@
+//1614 영식이의 손가락
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    long long n, m;
+    cin >> n;
+    cin >> m;
+    
+    // 결과가 21억을 넘는 경우가 있다.
+    long long answer = 0;
+    
+    // 각 손가락별로 수학규칙에 따라 바로 연산
+    if (n == 1)
+        answer = 8 * m;
+    else if (n == 2)
+    {
+        if (m % 2 == 0) 
+            answer = 4 * m + 1;
+        else
+            answer = 4 * m + 3;
+    }
+    else if (n == 3)
+        answer += 4 * m + 2;
+    else if (n == 4)
+        if (m % 2 == 0) 
+            answer = 4 * m + 3;
+        else
+            answer = 4 * m + 1;
+    else
+        answer = 8 * m + 4;
+        
+    cout << answer << endl;
+    
+    return 0;
+}
