@@ -1,0 +1,51 @@
+// 9251 LCS
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+    string a,b;
+    cin >> a;
+    cin >> b;
+    
+    a = " " + a;
+    b = " " + b;
+
+    vector<vector<int>> v(b.size());
+    vector<int> first(a.size(), 0);
+    v[0] = first;
+    
+    for (int i = 1 ; i < b.size(); i++)
+    {
+        vector<int> l(a.size(), 0);
+        v[i] = l;
+
+        for (int j = 1; j < a.size(); j++)
+        {
+            // 값이 다르다면, 위나 왼쪽 중 더 큰 값
+            if (b[i] != a[j])
+            {
+                int left = v[i][j-1];
+                int up = v[i-1][j];
+                
+                if (left < up)
+                    v[i][j] = up;
+                else
+                    v[i][j] = left;
+            }
+            // 값이 같다면, 왼쪽위+1 (본인과 같은 것이면 안 됨)
+            else
+            {
+                v[i][j] = v[i-1][j-1] + 1;   
+            }
+            //cout << v[i][j] << " ";
+        }
+        //cout << endl;
+    }
+    
+    cout << v[b.size()-1][a.size()-1] << endl;
+
+    return 0;
+}
